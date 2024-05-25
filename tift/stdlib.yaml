@@ -1,0 +1,52 @@
+---
+global: stdlib
+printAt(location, message):
+  - playerLocation = getLocation()
+  - locationMatch = location == playerLocation
+  - if(locationMatch).then(print(message))
+  - return(locationMatch)
+say(message): print('"' + message + '"')
+hide(entity): setTag(entity,'hidden')
+reveal(entity): delTag(entity,'hidden')
+not(value): "!value"
+and(value1, value2): value1 && value2
+or(value1, value2): value1 || value2
+hasTag(entity, tag): Array.includes(getEntity(entity).tags, tag)
+setTag(entity, tag):
+   if: not(hasTag(entity, tag))
+   then: Array.push(entity.tags, tag)
+delTag(entity, tag):
+    - entityObject = getEntity(entity)
+    - index = Array.indexOf(entityObject.tags, tag)
+    - if: index != -1
+      then: Array.splice(entityObject.tags, index, 1)
+return(value): value
+isCarrying(item): isAtLocation(item, '__PLAYER__') 
+isHolding(item): isCarrying(item) && !isInContainer(item)
+isOpenable(item): hasTag(item, 'openable') || hasTag(item, 'closable')
+open(item):
+  if: isOpenable(item)
+  then: item.isOpen = true
+  else: error('You cannot open ' + item.id)
+close(item):
+  if: isOpenable(item)
+  then: item.isOpen = false
+  else: error('You cannot close ' + item.id)
+gameOver(message): 
+  - move('__PLAYER__').to('__GAME_END__')
+  - tick() 
+  - view = obj()
+  - view.score = getPlayer().score
+  - view.maxScore = getMetadata('maxScore')
+  - view.message = message
+  - template = getProperty("gameOver.template")
+  - output = format(template,view)
+  - return(output)
+getPlayer(): getEntity('__PLAYER__')
+score(points):
+  - player = getPlayer()
+  - player.score = player.score + points
+getScore():
+  - player = getPlayer()
+  - return(player.score)
+---

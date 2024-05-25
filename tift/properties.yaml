@@ -1,0 +1,105 @@
+---
+property: look
+templates:
+  main: |
+   {{#isDark}}
+      It is dark, you cannot see a thing.
+    {{/isDark}}
+
+    {{^isDark}}
+    {{desc}}{{^desc}}{{name}}{{^name}}{{id}}{{/name}}{{/desc}}
+    {{/isDark}} 
+  items: |
+    {{^isDark}}
+    {{#hasItems}}
+    You can see:
+    {{/hasItems}}
+    {{#items}}
+    - {{> item}}
+    {{/items}}
+    {{/isDark}} 
+  partials:
+    item: >
+      {{#sentence}}
+        {{name}}
+        {{#location}}
+          ( {{#adposition}}{{.}}{{/adposition}}
+          {{^adposition}}in{{/adposition}} {{.}} )
+        {{/location}}
+      {{/sentence}}
+---
+property: examine
+templates:
+  container: 
+    in: |
+      Inside {{container}} is {{#items}}{{> item}}{{/items}}.
+    on: |
+      On {{container}} is {{#items}}{{> item}}{{/items}}.
+  partials:
+    item: >-
+       {{name}}
+       {{^isLast}}{{^isPenultimate}}, {{/isPenultimate}}{{/isLast}}
+       {{#isPenultimate}}and {{/isPenultimate}}
+---
+property: get
+templates:
+  container:
+    closed: >
+      You can't get {{item}} from {{container}}, {{container}} is closed.
+---
+property: put
+templates:
+  container:
+    closed: 
+      in: >
+        You can't put {{item}} into {{container}}, {{container}} is closed.
+      on: >
+        You can't put {{item}} onto {{container}}, {{container}} is closed.
+    inItem: 
+      in: >
+        You can't put {{item}} into {{container}}, {{container}} is in {{item}}.
+      on: >
+        You can't put {{item}} onto {{container}}, {{container}} is on {{item}}.
+---
+property: wait
+message: Time passes
+---
+property: open
+message: You open {{name}}
+templates:
+  isLocked: "{{#sentence}} {{item}} is locked {{/sentence}}"
+---
+property: close
+message: You close {{name}}
+---
+property: location
+messages:
+  leaves: "{{entity}} leaves{{#direction}} {{direction}}{{/direction}}"
+  arrives: "{{entity}} enters{{#direction}} from the {{direction}}{{/direction}}"
+---
+property: unlock
+templates:
+  alreadyUnlocked: "{{#sentence}}{{item}} is already unlocked{{/sentence}}"
+  wrongKey: "{{#sentence}}{{item}} cannot be unlocked with {{key}}{{/sentence}}"
+  isOpen: "{{#sentence}}{{item}} cannot be unlocked whilst it is open{{/sentence}}"
+  success: "{{#sentence}}You unlock {{item}}{{/sentence}}"
+---
+property: lock
+templates:
+  alreadyUnlocked: "{{#sentence}}{{item}} is already locked{{/sentence}}"
+  wrongKey: "{{#sentence}}{{item}} cannot be locked with {{key}}{{/sentence}}"
+  isOpen: "{{#sentence}}{{item}} cannot be locked whilst it is open{{/sentence}}"
+  success: "{{#sentence}}You lock {{item}}{{/sentence}}"
+---
+property: gameOver
+template: >
+  {{#message}}{{.}}{{/message}}
+  {{^message}}Game Over{{/message}}
+  {{br}}
+  {{#score}}
+    Score: {{.}}{{#maxScore}} / {{.}}{{/maxScore}}
+  {{/score}}
+    
+
+
+
