@@ -1,0 +1,824 @@
+---
+game: The Keep
+author: Tom Jefferys
+version: 0.1
+options:
+  - useDefaultVerbs
+---
+room: home
+name: Home
+desc: |
+  {{#firstTime}}
+  You relax into your comfy chair, sip a glass of wine, and contemplate the paperback on the cofee table nearby.
+  The day is finally over, the family are in bed, you can relax. 
+
+  A current of lavender scented summer air drifts through the open french doors, carrying the sound of a bumblebee, and 
+  some faint music.
+  The garden looks a bit different in the twilight, shadows where normally there is light, and lights at the end
+  where normall all is in shade.
+  {{/firstTime}}
+
+  {{^firstTime}}
+  You are sitting in on a comfy chair in your conservatory.  It's a warm summer's evening, and a pair of french 
+  doors look out over your garden. A mug of hot chocolate sits on the polished oak table next to you.
+  {{/firstTime}}
+##tags: [start]
+exits:
+  out: backgarden
+---
+room: backgarden
+name: Back Garden
+desc: |
+  Standing on the paved path leading down to the south end of the garden, you peer through the rose arch, to where your garden
+  fence should be, but the path seems to stretch on into the gloom of the night.
+exits:
+  in: home
+  north: boundry 
+before:
+  go(in): "'You turn around. The house has gone'"
+after:
+  go(north): 
+    - print('The path goes on for further than you expected, twisting and turning you lose all sense of direction')
+    - pause(5000)
+---
+room: boundry
+name: The Boundary
+desc: |
+  After what seems like hours you find an opening in the trees, and find yourself looking down into a valley.
+  You shiver, standing in the long shadows cast by the early morning light, which casts a golden sheen into
+  the scene below.
+exits:
+  down: crossroads
+  south: backgarden
+before:
+  go(south): > 
+    'You try to head back through the trees, but soon become hopelessly lost.
+      After what seems like an hour you are back where you started, looking 
+      down into the valley'
+---
+item: valley
+name: The valley
+desc: |
+  You look down into the valley, ahead in the distance lies a great castle, to is's west a large lake, and to
+  it's east, running right up to the moat is another forest. A rough path leads down to a small town.
+location: boundry
+---
+#
+#room: the_hill
+#name: The Hill
+#desc: |
+#  You finally reach the top of the large grassy hill. Looking down the valley expands in front of you, 
+#  and nestled in amongst the geography is your quarry.  The great castle, to it's west is the boating lake, 
+#  and to it's east, with trees running right up against the moat is the forest.
+#  From here the path continues down the side of the hill.
+#exits:
+#  down: crossroads
+#  south: home
+#tags: [start]
+---
+Crossroads
+---
+room: crossroads
+name: Crossroads
+desc: |
+  You stand at a crossroads, the paths lead north, direct to the castle, west towards the lake, and east to
+  the forest. 
+  Next to the road is a cart laden with barrels. A horse stands next to it placidly chewing on some grass. 
+  An elderly man is examining the cart
+# There is a statue to Hecate here.
+exits:
+  east: forest_entrance
+  west: lake
+  north: castle_approach
+---
+item: cart
+name: cart
+location: crossroads
+desc: |
+  The card is laden with barrels and listing to one side.
+after:
+  examine(this):
+    when: hasTag(wheel, 'hidden')
+    do:
+      - reveal(wheel)
+      - print(this.desc)
+      - print('One of the wheels is completely broken')
+---
+item: cartman
+name: elderly man
+location: crossroads
+desc: |
+  The man paces around the cart, occasionally pausing to inspect the wheel and tutting
+verbs: ["ask"]
+before:
+  ask(this).about(wheel): "'The wheels broken, if I can&apos;t get it fixed, I won&apos;t be able to make my deliveries'"
+---
+item: horse
+name: horse
+location: crossroads
+desc: |
+  The horse is large, brown, with a white spot on its nose.
+  {{#sometimes}}The lifts its a head, looks around, then returns to it's chewing{{/sometimes}}
+---
+item: wheel
+name: wheel
+location: crossroads
+desc: |
+  The large wheel is mishappen, one of it's wooden spokes is split
+verbs: ["ask.about"]
+tags: ["hidden"]
+---
+## The Forest
+---
+room: forest_entrance
+name: Forest Entrance
+desc: |
+  An oak forest lies ahead of you to the north.
+  The trees are densely packed, with brambles and patches of nettles filing in any gaps.
+  You can see nothing but shadows beyond the trees, and hear nothing but the susurration of the leaves.
+
+  There is a narrow opening through which the path continues.
+exits:
+  west: crossroads
+  north: forest_path
+---
+room: forest_path
+name: Forest Path
+desc: |
+  Little light penetrates the forest canopy.
+  The path runs north-south through the gloom.
+  There is a patch of foxgloves here.
+exits:
+  north: the_clearing
+  south: forest_entrance
+---
+item: foxgloves
+name: Foxgloves
+desc: |
+  A patch of foxgloves stand almost to shoulder hight, their purple flowers bob gently up and down.
+  {{#sometimes}} A bumblebee is busy collecting pollen {{/sometimes}}
+location: ForestPath
+---
+## The Clearing
+---
+room: the_clearing
+name: The Clearing
+desc: |
+  Here the forest opens out into a large clearing.
+  There is a ramshackle cottage, and a small well.
+  The path continues north through an openning in the trees.
+exits:
+  north: foot_hills
+  south: forest_path
+  in: cottage_living_room
+---
+item: cottage_in_clearing
+name: Cottage
+desc: |
+  A small squat timber framed building, with whitewashed wattle and daub walls, and a thatched roof.
+  It has a small door and window at the front, the door is closed.
+---
+item: well
+name: The well
+desc: |
+  A small brick well with a thatched roof.
+---
+# Cottage
+---
+room: cottage_living_room
+name: rustic living room
+desc: |
+  A small spartan living space, with a fireplace on one wall, a tatty arm chair is oposite.
+  A tall bookshelf stands in the corner. A wooden door is propped open in the east wall.
+exits:
+  east: cottage_kitchen
+  out: the_clearing
+---
+item: cottage_fireplace
+name: fireplace
+desc: |
+  Coals smoulder on the cast iron hearth. Still hot but no longer on fire. Wisps of 
+  smoke rise up a brick chimmney.
+location: cottage_living_room
+---
+item: bookcase
+name: bookcase
+location: cottage_living_room
+desc: |
+  A tall sparsely populated bookcase. It shelves reaach almost to the ceiling
+after:
+  examine(this):
+    when: hasTag(torch,'hidden')
+    do:
+      - reveal(torch)
+      - print(desc)
+      - print('On the top shelf, out of reach is a torch')
+---
+item: torch
+name: torch
+desc: A small battery powereed torch
+location: bookcase
+tags:
+  - carryable
+  - hidden
+  - lightSource
+before:
+  get(this):
+     when: this.location == 'bookcase' && not(stool.standing_on)
+     do: 
+      - print("It's too high, you can't reach")
+---
+item: tatty_armchair
+name: armchair
+desc: |
+  A threadbare3 but comfortable looking armchair.
+  {{#sat_on}}You are sitting in the chair{{/sat_on}}
+location: cottage_living_room
+verbs: 
+  - stand : sat_on
+  - sit : not(sat_on)
+sat_on: false
+before:
+  sit(this):
+    when: not(sat_on)
+    do: 
+      - print("You lower yourself into the chair")
+      - sat_on = true
+    otherwise: "'You are already sitting on the chair'"
+  stand:
+    when: sat_on
+    do:
+      - print("With great effort you lift yourself out of the comfy chair")
+      - sat_on = false
+    otherwise: print("You are already standing")
+---
+verb: sit
+tags: ["transitive"]
+---
+verb: stand
+tags: ["intransitive"]
+---
+verb: stand_on
+name: stand on
+tags: [transitive]
+---
+verb: get_down
+name: get down
+tags: [intransitive]
+---
+room: cottage_kitchen
+name: kitchen
+desc: |
+  A small kitchen with a large ceramic skink, a cast iron stove, a wooden table, and a stool.
+exits:
+  west: cottage_living_room
+---
+item: sink
+name: sink
+desc: |
+  The sink is white and ceramic, chipped in many places, and discoloured by age.
+  It is about half full with stagnant water. A rusty tap leans over from one
+  side.
+before:
+  get($item): 
+      when: item.location == 'sink' && not(rubber_gloves.location == "WEARING")
+      do: print("You're not putting your hands in there!")
+after:
+  examine(this):
+    - when: hasTag(plug,'hidden')
+      do: 
+        - print(this.desc)
+        - reveal(plug)
+        - print("Stopping the water flowing out is a rubber plug")
+location: cottage_kitchen
+verbs: [put.in]
+---
+item: plug
+name: plug
+desc: A small rubber plug.
+location: sink # Actually in sink
+## If in sink, talk about the chain
+tags: ['hidden', 'carryable']
+before:
+  get(this): "'You approach the murky sink water, but the smell, and multiple invertabrate lifeforms makes you back away'"
+---
+item: ball
+name: ball
+desc: A super bouncing ball
+location: cottage_kitchen
+tags: ['carryable']
+---
+item: rubber_gloves
+name: rubber gloves
+desc: A pair of bright yellow rubber globes
+location: cottage_kitchen
+tags: ['carryable', 'wearable']
+---
+item: stool
+name: stool
+desc: A heavy wooden stool
+location: cottage_kitchen
+sat_on: false
+standing_on: false
+verbs: 
+  - stand: sat_on
+  - sit: not(sat_on) 
+  - stand_on: not(standing_on)
+  - get_down: standing_on
+before:
+  go($direction):
+    switch:
+      - when: sat_on
+        do: print("You're not going anywhere whilst sitting down")
+      - when: standing_on
+        do: print("You need to get off the stool first")
+  sit(this):
+    when: not(sat_on)
+    do: 
+      - print("You sit on the had wooden stool")
+      - sat_on = true
+    otherwise: "'You are already sitting on the chair'"
+  stand:
+    when: sat_on
+    do:
+      - print("You stand up")
+      - sat_on = false
+    otherwise: print("You are already standing")
+  stand_on(this):
+    when: not(standing_on)
+    do:
+      - print("You carefully stand on the wooden stool")
+      - standing_on = true
+  get_down:
+    when: standing_on
+    do:
+      - print("You step down from the stool")
+      - standing_on = false
+after:
+#  go($direction):
+#     switch:
+#       - when: sat_on
+#         do: 
+#           - print("You stand up")
+#           - sat_on = false
+#       - when: standing_on
+#         do:
+#           - print("You get down from the stool")
+#           - standing_on = false
+         
+tags:
+  - pushable
+---
+## Castle Approach
+---
+room: castle_approach
+name: Castle Approach
+desc: |
+  The road to the castle. There is an inn here.
+exits:
+  in: the_inn
+  north: priory_outside
+  south: Crossroads
+---
+## The Inn
+---
+room: the_inn
+name: The Inn
+desc: |
+  You are in a cosy wood panelled inn. There are several tables and chairs, all unoccupied.
+  Opposite the door is the bar, where the inn's only occupant the barkeep stands
+exits:
+  out: castle_approach
+  up: inn_guestroom
+---
+room: inn_kitchen
+name: kitchen
+desc: |
+  A small kitchen where glasses are washed and simple meals prepared
+---
+room: inn_guestroom
+desc: |
+  A spartan room, dimply illuminated by a small grimy window.
+  There is a bed, a wooden trunk, and a bedside table.
+exits:
+  down: the_inn
+tags: [start]
+---
+item: barkeep
+location: the_inn
+name: the barkeep
+desc: |
+  A stout dour looking woman, busy polishing glasses, and occasionally sipping a cup of tea.
+verbs: ["ask"]
+--- 
+rule: move_barkeep
+scope:
+  - the_inn
+  - inn_kitchen
+repeat:
+  - print('The barkeep polishes some glasses')
+  - print('The barkeep sips her tea')
+  - "'The barkeep finished here'"
+  - [move(barkeep).to(inn_kitchen), "'The barkeep goes to the kitchen'"]
+  - "'The barkeep fills up her teapot'"
+  - [move(barkeep).to(the_inn), "'The barkeep returns to the bar'"]
+  - "'The barkeep pours herself a cup of tea'"
+---
+verb: ask
+attributes: ["about", "for"]
+tags: ["transitive"]
+---
+item: beer_thought
+name: beer
+location: the_inn
+verbs: ["ask.about", "ask.for"]
+before: 
+  ask(barkeep).about(this): print('I recomend the porter, it will get you proper sloshed')
+  ask(barkeep).for(this): print("You dont have enough money")
+---
+## Priory
+---
+room: priory_outside
+name: Outside the Priory
+desc: |
+  You are standing outside a large stone building.
+  In front of you is a large wooden door. Despite it's weatherbeaten appearence you suspect it could hold back a stampeding elephant.
+exits:
+  in: nave_west
+  south: castle_approach
+---
+room: nave_west
+name: The Nave
+desc: |
+  The nave of a small church. Rows of pews are aranged to either side.
+  The nave extends to the east through the church.
+  Either side of a central aisle are uncomfortable lookking pews.
+  Gapes in the door permit an intemitant daft to whistle through the building and you shiver thinking of the congregations suffering through a long sunday sermon.
+exits:
+  east: nave_east
+  out: priory_outside
+  south: cloister_nw
+---
+room: nave_east
+name: Crossing
+desc: |
+  The east part of the nave.
+  To the north and south are the transcepts, and to the east is the chancel.
+exits:
+  east: chancel
+  west: nave_west
+  north: north_transcept
+  south: south_transcept
+---
+room: north_transcept
+name: north transcept
+desc: |
+  The north transcept
+exits:
+  south: nave_east
+---
+room: south_transcept
+name: south transcept
+desc: |
+  The south transcept
+exits:
+  north: nave_east
+---
+room: chancel
+name: The Chancel
+desc: |
+  The chancel is separated from the rest of the church by an ornate rood screen.
+  In the middle is a stone alter, on top of which is a silver crucifix.
+  Beyond the alter a stained glass window.
+exits:
+  west: nave_east
+---
+item: stained_glass_window
+name: window
+desc: |
+  The glass is split into a trypich, each panel displaying a seperate image.\
+  \
+  On the left shows a figure kneeling, reading a book.\
+  In the center the figure appears to be sat on a ornate throne. A crowd of people stare up at him.\
+  The right panel, the figure is lying in bed.
+location: chancel
+---
+item: altar
+name: altar
+desc: |
+  The altar is plainly made of smooth white stone, on top of which is affixed a large sivler crucifix
+location: chancel
+---
+item: rood_screen
+name: rood screen
+desc: |
+  A barrier to keep the clergy separate from the leity, polished wood carved with geometric patterns, and enough spaces through which the
+  congregation can see the activities of the priest.
+location: chancel
+---
+item: ethel
+name: Ethel
+desc: |
+  The abbess stands tall, wearing dark robes, and a black coif over her head.
+  She is carrying a wooden staff
+location: chancel
+---
+room: cloister_nw
+name: cloister (northwest)
+desc: |
+  {{#firstTime}}
+  You enter the cloister, an enclosed passageway running around a central quad.
+  From here the passage runs to the south and east.
+  Windows look out upon the quad, and provided illumination to the monks working and exercising here.
+  {{/firstTime}}
+  {{^firstTime}}
+  The northwest corner of the cloister, sunlight shines in through the south facing windows.
+  {{/firstTime}}
+exits:
+  east: cloister_ne
+  south: cloister_se
+  north: nave_west
+---
+room: cloister_ne
+name: cloister (northeast)
+desc: |
+  The northeast corner of the cloister.
+  A desk an chair are set up here under the windows, where a monk is sat here, hard at work writing on some parchment with a quill pen.
+  There are several inkwells each with a different colour ink
+exits:
+  south: cloister_se
+  west: cloister_nw
+## Fetch quest, find some coloured ink
+## You need to do some writing, and need a quill.
+## Cut goose feather with knife
+## How do you get the goose feather?  This could be an interesting puzzle.  Distract goose with some grain?  
+## Also since the protagonist is an author, maybe this hints towards the back story
+---
+item: scribe
+name: Borris the scribe
+desc: |
+  The monk is permenently hunched over, with a twisted spine, probably caused by the years stooped over the desk.
+  His ink stained fingers tightly grasp a goose feather quill as he carefully copies letters onto some parchment.
+verbs: [ask]
+location: cloister_ne
+---
+item: pen
+name: Borris' pen
+desc: |
+  A goose quill pen, darkly stained at the nib, with most of the feather barbs removed, apart from a decorative tuft at the end.
+location: scribe
+tags: [carryable]
+verbs: [ask.about, ask.for]
+before:
+  get(this): "'Borris grips the quil tightly in his ink stained hands. \"Get your own\"'"
+  ask(scribe).about(this): say("My favourite pen, made from the wing feather of a goose, it has never let me down")
+  ask(scribe).for(this): say("You can't have this one, but if you find yourself a goose feather I'll show you how to make one")
+---
+room: cloister_se
+name: cloister (southeast)
+desc: |
+  The south east corner of the cloister.
+  A door leads to the east, and the cloister continues to the north and west
+exits:
+  west: cloister_sw
+  east: priory_outside
+---
+room: cloister_sw
+name: cloister (southwest)
+desc: |
+  The southwest corncer of the cloister.
+  The north facing window's don't allow much sunlight to penetrate into the gloom here.
+exits:
+  north: cloister_nw
+  east: cloister_se
+---
+room: priory_outside
+name: Outside
+desc: |
+  Outside in the priory grounds.
+  To the southeast is the infirmary.
+  West leads to the cloister.
+  North leads to an orchard
+exits:
+  north: priory_orchard
+  southeast: infirmary_outside
+  west: cloister_sw
+---
+room: infirmary_outside
+name: infirmary outside
+desc: |
+  In front of the entrance to the infirmary.
+  There are several herbs bushes here.
+exits:
+  northwest: priory_outside
+  in: infirmary
+---
+## Infirmary
+---
+room: infirmary
+name: infirmary
+desc: |
+  A place for the indisposed and ailing.
+  Poorly ventilated, a fug of smoke and incense barely cover up the smells of sickness and death. 
+  Several beds are laid out beside the walls, only one of which is occupied.
+  {{#sometimes}}{{br}}The physician {{#choose}}is busy preparing some medicine.||is attending to the patient{{/choose}}{{/sometimes}}
+  {{#sometimes}}{{br}}You hear a faint repeating tone, like someone playing a single staccato note on a trumpet{{/sometimes}}
+exits:
+  out: infirmary_outside
+---
+item: patient
+location: infirmary
+name: patient
+desc: |
+  The man lies motionless on the bed.
+  His face is swollen and bruised, and there's a jagged gash on his forehead weeps blood.
+  A splint is strapped to his leg.
+verbs: [ask.about]
+before:
+  ask(physician).about(this): |
+    '"There&apos;s not much I can do, I&apos;ve made him as comfortable, 
+     but the wounds are infected, the fever is strong,
+     and his fate is in gods hands now"'
+---
+item: physician
+location: infirmary
+name: physician
+desc: |
+  The monk is almost bald, and face wrinkled.
+verbs: [ask]
+---
+item: medicine
+name: medicine
+location: infirmary
+verbs: [ask.about]
+before:
+  ask(physician).about(this): |
+    '"My pharmacy is limited, I only have limited medicine here.
+     The wise woman in the forest may know more of the art"'
+---
+## Orchard
+---
+room: priory_orchard
+name: orchard
+desc: |
+  There are several apple trees growing here.
+  Bees buzz around the hanging fruit, which looks almost ripe enough to eat.
+exits:
+  south: priory_outside
+  north: stream_west
+---
+item: ladder
+name: ladder
+desc: A wooden ladder, probably used by the monks for havesting apples
+tags: [carryable]
+---
+item: basket
+name: bakset
+desc: A wicker basket
+tags: [carryable]
+---
+## The stream
+---
+room: stream_west
+name: stream
+desc: |
+  Crossing a fast flowing stream is a small wooden bridge
+exits:
+  north: bridge
+  east: stream_east
+---
+room: stream_mid
+name: stream
+desc: |
+  The stream gurgles and hisses as it rushes over jagged rocks.
+exits:
+  east: stream_east
+  west: stream_west
+---
+room: stream_east
+name: stream
+desc: |
+  A tree has fallen across the stream here.  
+  Slick with moss and slime it'd make for a treacherous crossing, but it looks like it'd hold your weight.
+onAddChild(entity): print(entity.id)
+onRemoveChild(entity):
+add(var1, var2): 
+onMove(newLocation):
+
+
+## The Hills
+---
+room: foot_hills
+name: Hills
+desc: |
+  Gorse and heather covered hills rise before you. The yellow and purple flowers are like lookgin at
+  an oversaturated photo.
+  A herd of sheep graze placidly on them, occasionaly bleating to each other.
+  To the north the ground steepens, and mountains rise in the distance.
+  To the south is the forest path.
+exits:
+  north: mountains
+  south: the_clearing
+---
+room: mountains
+name: The mountains
+desc: |
+  The ground steepens here, and a series of rocky cliffs make further upwards progress impossible.
+  There is a shadowy cave opening between some rocks.
+exits:
+  south: foot_hills
+  in: cave_entrance
+---
+## The cave
+---
+room: cave_entrance
+name: Cave entrance
+desc: |
+  Sunlight filters through the cave openning iluminating a hard uneven floor.
+  The cave continues east into darkness.
+exits:
+  east: deeper_cave
+  out: mountains
+---
+room: deeper_cave
+name: Cave Depths
+desc: |
+  This looks like it was used as a mining store room
+# You can't see a thing. Only the light from the entrance back to the west
+tags:
+  - dark
+exits:
+  west: cave_entrance
+---
+item: dynamite
+name: dynamite
+desc: A stick of dynamite
+location: deeper_cave
+tags: [carryable]
+---
+item: shovel
+name: shovel
+desc: |
+  A sturdy metal shovel, with a wooden handle.
+  It might once have been painted green judging by the fleck of paint remaining on it.
+location: deeper_cave
+verbs: ["dig.with"]
+tags: [carryable]
+---
+## The lake
+---
+room: lake
+name: Lake
+desc: |
+  You stand at the edge of a large lake.
+  Out in the centre of the lake rests a small island, supporting a small number of trees.
+  The path continues north along the side of the lake, and back east to the crossroads.
+exits:
+  east: crossroads
+  north: tributary
+---
+room: tributary
+name: Tributary
+desc: |
+  You're route further north is blocked by a slowly flowing river that leading into the lake
+  About halfway across there is a sunken boat
+exits:
+  northeast: upstream
+  south: lake
+---
+room: upstream
+name: Upstream
+desc: |
+  The river flows down from some higher ground. The bank on this side is steep and rocky.
+  The path curves from southwest to the west.
+exits:
+  southwest: tributary
+---
+item: rocky_bank
+name: rocky bank
+location: upstream
+desc: |
+  The river bank here is made of loosely packed rock and gravel.
+  It's probably only a matter of time before it collapses.
+## Dig hole in bank, place dynamite in hole
+verbs:
+  - dig
+before:
+  dig(this).with(shovel): 
+    - print("With much effort you dig a small untidy hole in the riverbank")
+    - reveal(rocky_bank_hole)
+---
+item: rocky_bank_hole
+name: hole
+location: rocky_bank
+desc: A small hole dug in the river bank. The edges are rough and unven.
+verbs: [put.in]
+tags: [container, hidden]
+---
+verb: dig
+attributes: [with]
+tags: [transitive]
+    
+
+ 
+

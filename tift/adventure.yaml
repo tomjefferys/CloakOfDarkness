@@ -1,0 +1,141 @@
+
+--- # src/game.yaml
+game: Cloak of Darkness
+author: Presto Turnip
+version: 1.0.0
+gameId: 58379ffe-9ec5-4317-bdd2-1b79c171a2ec
+description: |
+  A port of Cloak of Darkness to function as a demonstration of TIFT
+options:
+  - useDefaultVerbs
+introText: |
+  Hurrying through the rainswept November night, you're glad to
+    see the bright lights of the Opera House. It's surprising that
+    there aren't more people about but, hey, what do you expect in
+    a cheap demo game...?
+    {{br}}**Cloak of Darkness**{{br}}
+    A basic IF demonstration.{{br}}
+maxScore: 2
+beforeGame():
+  - print(introText)
+--- # src/verbs/hang.yaml
+verb: hang
+tags:
+  - transitive
+attributes:
+  - "on"
+contexts:
+  - inventory
+  - wearing
+actions:
+  hang($hangable).on($hanger):
+    - moveItemTo(hangable, hanger)
+--- # src/rooms/bar.yaml
+room: bar
+name: BarFOO
+desc: |
+  The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, 
+  is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor.
+tags:
+  - dark
+exits:
+  north: foyer
+blunderCount: 0
+onAddChild(entity): 
+  when: isAtLocation(cloak, entity)
+  then: 
+    - setTag(this, 'dark')
+    - openExit(bar, 'east', bar)
+    - openExit(bar, 'south', bar)
+    - openExit(bar, 'west', bar)
+  otherwise: 
+    - delTag(this, 'dark')
+    - closeExit(bar, 'east')
+    - closeExit(bar, 'south')
+    - closeExit(bar, 'west')
+before:
+  go($direction):
+    unless: direction == 'north'
+    do: 
+       - print("Blundering around in the dark isn't a good idea!")
+       - blunderCount = blunderCount + 1
+
+--- # src/rooms/foyer.yaml
+room: foyer
+name: Foyer of the Opera House
+desc: |
+  You are standing in a spacious hall, 
+   splendidly decorated in red and gold,
+   with glittering chandeliers overhead.
+  The entrance from the street is to the north,
+   and there are doorways south and west.
+tags:
+  - start
+exits:
+  south: bar
+  west: cloakroom
+  north: outside
+before:
+  go(north): |
+    "You've only just arrived, and besides, the weather outside seems to be getting worse."
+--- # src/rooms/cloakroom.yaml
+room: cloakroom
+name: Cloakroom
+desc: |
+  The walls of this small room were clearly once lined with hooks,
+    though now only one remains. The exit is a door to the eckast.
+exits:
+  east: foyer
+--- # src/items/cloak.yaml
+item: cloak
+name: velvet cloak
+desc: |
+  A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. 
+  Its blackness is so deep that it almost seems to suck light from the room.
+tags:
+  - carryable
+  - worn
+verbs:
+  - hang
+dropMessage: >
+  This isn't the best place to leave a smart velvet cloak
+before:
+  drop(this): dropMessage
+  
+--- # src/items/hook.yaml
+item: hook
+name: small brass hook
+desc: >
+  It's just a small brass hook
+  {{#cloakOnHook}} with a cloak hanging on it.{{/cloakOnHook}}
+  {{^cloakOnHook}} screwed to the wall {{/cloakOnHook}}
+cloakOnHook(): 
+  - onHook = isAtLocation(cloak, hook)
+  - return(onHook)
+location: cloakroom
+adposition: hanging on
+verbs:
+  -  hang.on
+after:
+  hang(cloak).on(this):
+    once: score(1)
+--- # src/items/message.yaml
+item: message
+name: message
+location: bar
+messages:
+  win: >
+    The message, neatly marked in the sawdust, reads...{{br}}
+    You have won.
+  lose: >
+    The message has been carelessly trampled, making it difficult to read.
+    You can just distinguish the words...{{br}}
+    You have lost.
+verbs: ["examine"]
+before:
+  examine(this):
+    when: bar.blunderCount <= 2
+    then: 
+      - once: score(1)
+      - gameOver(messages.win)
+    else: gameOver(messages.lose)
