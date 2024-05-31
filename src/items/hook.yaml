@@ -1,6 +1,6 @@
 item: hook
 name: small brass hook
-desc: >
+description: >
   A small brass hook
   {{#cloakOnHook}} with a cloak hanging on it.{{/cloakOnHook}}
   {{^cloakOnHook}} screwed to the wall. {{/cloakOnHook}}

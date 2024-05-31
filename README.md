@@ -43,7 +43,7 @@ actions:
 --- # src/rooms/bar.yaml
 room: bar
 name: Bar
-desc: >
+description: >
   A rough looking bar, It is completely empty except for a layer of sawdust covering the floor.
   It looks like some sort of message has been written in the sawdust.
 tags:
@@ -73,7 +73,7 @@ before:
 --- # src/rooms/foyer.yaml
 room: foyer
 name: Foyer of the Opera House
-desc: >
+description: >
   You are standing in the foyer of the opera house.
   The palatial space is lit from above by large chandeliers.
   The entrance from the street is to the north, there doors to the south and west.
@@ -91,7 +91,7 @@ before:
 --- # src/rooms/cloakroom.yaml
 room: cloakroom
 name: Cloakroom
-desc: >
+description: >
   The small cloakroom has seen better days.
   Marks on the walls show where hooks used to be attached, now all removed except for one.
   The exit is a door to the east.
@@ -101,7 +101,7 @@ exits:
 --- # src/items/cloak.yaml
 item: cloak
 name: velvet cloak
-desc: >
+description: >
   A cloak of purest black, a little damp from the rain, its darkness seems to suck in all the light.
 tags:
   - carryable
@@ -116,7 +116,7 @@ before:
 --- # src/items/hook.yaml
 item: hook
 name: small brass hook
-desc: >
+description: >
   A small brass hook
   {{#cloakOnHook}} with a cloak hanging on it.{{/cloakOnHook}}
   {{^cloakOnHook}} screwed to the wall. {{/cloakOnHook}}

@@ -33,7 +33,7 @@ actions:
 --- # src/rooms/bar.yaml
 room: bar
 name: BarFOO
-desc: |
+description: |
   The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, 
   is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor.
 tags:
@@ -63,7 +63,7 @@ before:
 --- # src/rooms/foyer.yaml
 room: foyer
 name: Foyer of the Opera House
-desc: |
+description: |
   You are standing in a spacious hall, 
    splendidly decorated in red and gold,
    with glittering chandeliers overhead.
@@ -81,7 +81,7 @@ before:
 --- # src/rooms/cloakroom.yaml
 room: cloakroom
 name: Cloakroom
-desc: |
+description: |
   The walls of this small room were clearly once lined with hooks,
     though now only one remains. The exit is a door to the eckast.
 exits:
@@ -89,7 +89,7 @@ exits:
 --- # src/items/cloak.yaml
 item: cloak
 name: velvet cloak
-desc: |
+description: |
   A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. 
   Its blackness is so deep that it almost seems to suck light from the room.
 tags:
@@ -105,7 +105,7 @@ before:
 --- # src/items/hook.yaml
 item: hook
 name: small brass hook
-desc: >
+description: >
   It's just a small brass hook
   {{#cloakOnHook}} with a cloak hanging on it.{{/cloakOnHook}}
   {{^cloakOnHook}} screwed to the wall {{/cloakOnHook}}

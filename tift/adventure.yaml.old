@@ -10,14 +10,14 @@ options:
 --- # src/adventure/rooms/outside.yaml
 room: out
 name: out
-desc: |
+description: |
   You head out to the cricket match.
   
   The end
 --- # src/adventure/rooms/stairs.yaml
 room: stairs
 name: stairs
-desc: |
+description: |
   The stairs start to descend into the gloom, there is a light switch here.
 exits:
   down: cellar_west
@@ -25,7 +25,7 @@ exits:
 --- # src/adventure/rooms/cellar_west.yaml
 room: cellar_west
 name: cellar (west)
-desc: |
+description: |
   {{#firstTime}}
   You walk carefully down the stairs, the wood shifts and creaks as you descend
   {{/firstTime}}
@@ -39,12 +39,12 @@ tags: [dark]
 --- # src/adventure/rooms/secret_room.yaml
 room: secret_room
 name: secret room
-desc: |
+description: |
   You did not know this room existed
 --- # src/adventure/rooms/cellar_east.yaml
 room: cellar_east
 name: cellar (east)
-desc: |
+description: |
   The east end of the cellar.  The boiler for the house is here, and next to it attached to the wall is the fuse box.
   The cellar extends to the south, and there is a small dimly lit alcove to the north.
 darkdesc: |
@@ -58,7 +58,7 @@ tags: [dark]
 --- # src/adventure/rooms/hallway.yaml
 room: hallway
 name: hallway
-desc: |
+description: |
   {{#firstTime}}
   The sun is shining, its a beautiful day.
   A handful of small clouds drift aimlessly across the unblemished sky.
@@ -87,7 +87,7 @@ before:
 --- # src/adventure/rooms/cellar_alcove.yaml
 room: cellar_alcove
 name: Alcove
-desc: |
+description: |
   A small alcove, dim light filters in through a leaf covered skylight.
 exits:
   south: cellar_east
@@ -95,7 +95,7 @@ exits:
 --- # src/adventure/rooms/cellar_south.yaml
 room: cellar_south
 name: cellar (south)
-desc: |
+description: |
   This part of the cellar is filled with the previous occupants bric-a-brac, you never got round to clearing it out.
 darkdesc: |
   It's pitch black, no light penetrates this corner of the cellar
@@ -111,7 +111,7 @@ tags: [dark]
 --- # src/adventure/items/chair.yaml
 item: chair
 name: chair
-desc: |
+description: |
   Rough and uncomfortable, made of sturdy but unfinished wood.
   No one has ever wanted to sit on it, the risk of a painful splinter too high.
 location: cellar_south
@@ -184,7 +184,7 @@ tags: [intransitive]
 item: boiler
 name: boiler
 location: cellar_east
-desc: |
+description: |
   Despite the warm weather, the boiler is on, humming away to itself, probably providing heat to the hot water tank.
   Long overdue a service it coughs and wheezes like emphasemic old man.
   Every now and them a rattle comes from the flue.
@@ -194,7 +194,7 @@ verbs:
 item: fuse_box
 name: fuse box
 location: cellar_east
-desc: |
+description: |
   The house was rewired recently, after one too many shocking incidents. The old fuse wire, has been replaced with
   new shiny minature circuit breakers.
 # Fuse box, full of switches.  What do they do
@@ -202,7 +202,7 @@ desc: |
 item: rd50
 name: RD-50
 article: a can of
-desc:
+description:
   A can of RD-50. *For all your lubrication and rust removal needs*
 location: cellar_east
 tags: 
@@ -221,7 +221,7 @@ actions:
 item: cricket_bat
 name: cricket bat
 location: cellar_west
-desc: A wooden cricket bat, stained and dented with many years of loyal service
+description: A wooden cricket bat, stained and dented with many years of loyal service
 tags: [carryable]
 --- # src/adventure/items/clock.yaml
 item: clock
@@ -230,7 +230,7 @@ location: hallway
 hour: 10
 minute: 0
 minuteDisplay: "00"
-desc: |
+description: |
   An old imposing grandfather clock. The second hand ticks urgently through the minutes.
 
   It's {{hour}}:{{minuteDisplay}}.
@@ -245,7 +245,7 @@ afterTurn():
 --- # src/adventure/items/bird_feeder.yaml
 item: bird_feeder
 name: bird feeder
-desc: |
+description: |
   You used to hang the bird feeder out in the back yard, but Harry kept catching the poor blighters.
   Blood and feathers all over the lawn
   Your new past-time as a twitcher was swiftly abandoned and the feeder brought inside.
@@ -286,7 +286,7 @@ after:
 item: pet_carrier
 name: pet carrier
 location: shelves
-desc: |
+description: |
   An old plastic pet carrier. Could hold a medium sized cat.
   A metal door at the front allows the animal in and out.
   Air-holes in the top allow it to breathe.
@@ -305,7 +305,7 @@ before:
 item: shelves
 name: shelves
 location: cellar_west
-desc: Shelves extends up the wall, way beyond your reach.
+description: Shelves extends up the wall, way beyond your reach.
 relativeLocation: "on"
 tags:
   - container
@@ -314,13 +314,13 @@ after:
     when: hasTag(pet_carrier,'hidden')
     do:
       - reveal(pet_carrier)
-     # - print(desc)
+     # - print(description)
       - print('On the top shelf, out of reach is a pet carrier')
 containString: on shelf # TODO make this work
 --- # src/adventure/items/cellar_key.yaml
 item: cellar_key
 name: key
-desc: A small chrome key
+description: A small chrome key
 location: rat
 tags:
   - carryable
@@ -333,7 +333,7 @@ before:
 --- # src/adventure/items/stickers.yaml
 item: stickers
 location: cellar_south
-desc: A sheet of glow in the dark stickers depicting various superheroes
+description: A sheet of glow in the dark stickers depicting various superheroes
 tags: [visibleWhenDark, carryable, hidden]
 before:
   get(this):
@@ -342,7 +342,7 @@ before:
 item: rat
 name: rat
 location: cellar_east
-desc: |
+description: |
   {{#firstTime}}
   *You have spent a small fortune on exterminators, not that it did any good.
   Traps were laid everywhere.
@@ -394,7 +394,7 @@ afterTurn():
 item: skylight
 name: skylight
 location: cellar_alcove
-desc: |
+description: |
   The skylight sits at ground level and supplies some much needed daylight to the cellar.
   In principle that is, the glass has been partially covered in mulch and dead leaves, allowing only a dull light through.
 tags:
@@ -407,7 +407,7 @@ before:
 --- # src/adventure/items/glow.yaml
 item: glow
 name: glow
-desc: A faint glowing
+description: A faint glowing
 location: cellar_south 
 before:
   examine(this):
@@ -418,7 +418,7 @@ tags:
 --- # src/adventure/items/cellar_door.yaml
 item: cellar_door
 name: cellar door
-desc: |
+description: |
   A solid door, a dead latch locks it when it shuts
 location: stairs
 tags: 
@@ -442,7 +442,7 @@ before:
 --- # src/adventure/items/peanut.yaml
 item: peanut
 name: peanut
-desc: | 
+description: | 
   A peanut. Out of it's shell.
   You'd hoped it would attract a woodpecker.
   *Maybe* it did.
@@ -456,7 +456,7 @@ location: bird_feeder
 item: light_switch
 name: light switch
 location: stairs
-desc: |
+description: |
   This switch operates the lights in the cellar
 
   The switch is in the {{#is_on}}on{{/is_on}}{{^is_on}}off{{/is_on}} position
