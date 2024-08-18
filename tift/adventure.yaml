@@ -4,17 +4,20 @@ game: Cloak of Darkness
 author: Presto Turnip
 version: 1.0.0
 gameId: 58379ffe-9ec5-4317-bdd2-1b79c171a2ec
-description: |
+description: >
   A port of Cloak of Darkness to function as a demonstration of TIFT
 options:
   - useDefaultVerbs
-introText: |
-  Hurrying through the rainswept November night, you're glad to
-    see the bright lights of the Opera House. It's surprising that
-    there aren't more people about but, hey, what do you expect in
-    a cheap demo game...?
-    {{br}}**Cloak of Darkness**{{br}}
-    A basic IF demonstration.{{br}}
+introText: > 
+  Hurrying through the damp autumn evening, 
+    thankful to have your favourite cloak to keep the rain off,
+    you finally approach the grand opera house.
+    The streets are are strangely deserted,
+    but this is not really unexpected in a simple demo game.
+    {{br}}
+    **Cloak of Darkness**
+    {{br}}
+    A basic IF demonstration.
 maxScore: 2
 beforeGame():
   - print(introText)
@@ -32,10 +35,10 @@ actions:
     - moveItemTo(hangable, hanger)
 --- # src/rooms/bar.yaml
 room: bar
-name: BarFOO
-description: |
-  The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, 
-  is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor.
+name: Bar
+description: >
+  A rough looking bar, It is completely empty except for a layer of sawdust covering the floor.
+  It looks like some sort of message has been written in the sawdust.
 tags:
   - dark
 exits:
@@ -63,35 +66,34 @@ before:
 --- # src/rooms/foyer.yaml
 room: foyer
 name: Foyer of the Opera House
-description: |
-  You are standing in a spacious hall, 
-   splendidly decorated in red and gold,
-   with glittering chandeliers overhead.
-  The entrance from the street is to the north,
-   and there are doorways south and west.
+description: >
+  You are standing in the foyer of the opera house.
+  The palatial space is lit from above by large chandeliers.
+  The entrance from the street is to the north, there doors to the south and west.
 tags:
   - start
 exits:
   south: bar
   west: cloakroom
   north: outside
+leaveMessage: >
+  You've only just arrived, and besides, the weather outside seems to be getting worse.
 before:
-  go(north): |
-    "You've only just arrived, and besides, the weather outside seems to be getting worse."
+  go(north): leaveMessage
 --- # src/rooms/cloakroom.yaml
 room: cloakroom
 name: Cloakroom
-description: |
-  The walls of this small room were clearly once lined with hooks,
-    though now only one remains. The exit is a door to the eckast.
+description: >
+  The small cloakroom has seen better days.
+  Marks on the walls show where hooks used to be attached, now all removed except for one.
+  The exit is a door to the east.
 exits:
   east: foyer
 --- # src/items/cloak.yaml
 item: cloak
 name: velvet cloak
-description: |
-  A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. 
-  Its blackness is so deep that it almost seems to suck light from the room.
+description: >
+  A cloak of purest black, a little damp from the rain, its darkness seems to suck in all the light.
 tags:
   - carryable
   - worn
@@ -106,9 +108,9 @@ before:
 item: hook
 name: small brass hook
 description: >
-  It's just a small brass hook
+  A small brass hook
   {{#cloakOnHook}} with a cloak hanging on it.{{/cloakOnHook}}
-  {{^cloakOnHook}} screwed to the wall {{/cloakOnHook}}
+  {{^cloakOnHook}} screwed to the wall. {{/cloakOnHook}}
 cloakOnHook(): 
   - onHook = isAtLocation(cloak, hook)
   - return(onHook)
